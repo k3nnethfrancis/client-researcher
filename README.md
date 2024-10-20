@@ -160,6 +160,13 @@ grip reports/<report_name>.md
 
 Replace `<report_name>` with the actual name of the report file you want to view. This will start a local server, and you can view the rendered report by opening a web browser and navigating to the URL provided by grip (usually http://localhost:6419).
 
+## Potential Improvements
+
+1. Add perplexity integration
+2. Add better validation to allow open source models to be used more reliably
+3. Integration with additional data sources for more comprehensive research.
+4. Prompt engineering for better content relevance scoring.
+
 
 ## Project Structure
 
@@ -191,13 +198,6 @@ If you encounter any issues while running the scripts, check the following:
 3. Check the console output for any error messages or logs that might indicate the problem.
 
 If you're still having trouble, please open an issue on the GitHub repository with a detailed description of the problem and any relevant error messages.
-
-## Potential Improvements
-
-1. Add perplexity integration
-2. Add better validation to allow open source models to be used more reliably
-3. Integration with additional data sources for more comprehensive research.
-4. Prompt engineering for better content relevance scoring.å
 
 ## Contributing
 
