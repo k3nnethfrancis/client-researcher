@@ -1,6 +1,6 @@
-# ag42-client-researcher
+# client-researcher
 
-ag42-client-researcher is an AI-powered content research and reporting tool designed to generate personalized reports for clients based on their profiles and interests.
+client-researcher is an AI-powered content research and reporting tool designed to generate personalized reports for clients based on their profiles and interests.
 
 ## Overview
 
@@ -14,8 +14,8 @@ This project consists of several components:
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/ag42-client-researcher.git
-   cd ag42-client-researcher
+   git clone https://github.com/yourusername/client-researcher.git
+   cd client-researcher
    ```
 
 2. Create a virtual environment and activate it:
@@ -83,7 +83,7 @@ You can customize the behavior of the AI agents by modifying the prompts in `con
 
 ## Contributing
 
-Contributions to ag42-client-researcher are welcome! Please feel free to submit a Pull Request.
+Contributions to client-researcher are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
@@ -105,4 +105,4 @@ If you're still having trouble, please open an issue on the GitHub repository wi
 2. Prompt engineering for better content relevance scoring.
 3. A web interface for easier interaction with the tool.
 
-We hope you find ag42-client-researcher useful for your content research needs. If you have any questions or feedback, please don't hesitate to reach out or open an issue on GitHub.
+We hope you find client-researcher useful for your content research needs. If you have any questions or feedback, please don't hesitate to reach out or open an issue on GitHub.
