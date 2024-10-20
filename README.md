@@ -67,6 +67,16 @@ python agent_executor.py --client "Client Name" [--context "Additional context"]
 
 This will run the entire workflow, including profile loading (or generation if it doesn't exist), content research, and report generation. The generated report will be saved in the `reports` directory.
 
+### 4. Context flag and modular execution
+
+The context flag allows you to add additional context to the research process. This can be useful to build more accurate profiles (e.g., when you have a clients name and an affiliation such as their company the search can more reliably find the exact person you are researching) and to add additional context to the research process (e.g., when you want to add a specific question you want to answer about or for the client).
+
+You can also run the individual agents by calling them directly, with or without the context flag. For example:
+
+```
+python -m agents.client_profiler "Client Name" --context "Additional context"
+```
+
 ## Project Structure
 
 - `agents/`: Directory containing the agent modules
