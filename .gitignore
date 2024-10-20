@@ -21,6 +21,11 @@ venv/
 /profiles/*
 /reports/*
 
+# Exclude "example" files/folders in specific directories
+!/content/*example*
+!/profiles/*example*
+!/reports/*example*
+
 # Ignore .cursorrules files
 .cursorrules
 

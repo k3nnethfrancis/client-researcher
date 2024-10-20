@@ -108,8 +108,26 @@ If you're still having trouble, please open an issue on the GitHub repository wi
 
 ## Potential Improvements
 
-1. Integration with additional data sources for more comprehensive research.
-2. Prompt engineering for better content relevance scoring.
-3. A web interface for easier interaction with the tool.
-4. Improved error handling and recovery mechanisms.
-5. Support for batch processing of multiple clients.
+1. Add perplexity integration
+2. Add better type safety to allow open source models to be used more reliably
+3. Integration with additional data sources for more comprehensive research.
+4. Prompt engineering for better content relevance scoring.
+5. A web interface for easier interaction with the tool.
+6. Improved error handling and recovery mechanisms.
+7. Support for batch processing of multiple clients.
+
+## Viewing Reports
+
+To view a generated report rendered in your browser, you can use the `grip` tool. First, make sure you have `grip` installed:
+
+```
+pip install grip
+```
+
+Then, to view a specific report, run:
+
+```
+grip reports/<report_name>.md
+```
+
+Replace `<report_name>` with the actual name of the report file you want to view. This will start a local server, and you can view the rendered report by opening a web browser and navigating to the URL provided by grip (usually http://localhost:6419).
