@@ -27,22 +27,23 @@ from agents.report_generator import generate_report
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-def load_client_profile(client_name: str) -> ClientProfile:
+def load_client_profile(client_name: str, context: str = "") -> ClientProfile:
     """Load a client profile from the profiles directory or create a new one if it doesn't exist."""
     filename = f"profiles/{client_name.replace(' ', '_').lower()}.json"
     if not os.path.exists(filename):
         logger.info(f"No profile found for {client_name}. Running client profiler.")
-        profile = run_client_profiler(client_name)
-        
-        # Check again if the file was created
-        if not os.path.exists(filename):
-            raise FileNotFoundError(f"Failed to create profile for {client_name}")
-    else:
-        with open(filename, 'r') as f:
-            profile_data = json.load(f)
-        profile = ClientProfile(**profile_data)
+        try:
+            profile = run_client_profiler(client_name, context)
+            logger.info(f"Profile generated successfully for {client_name}")
+            return profile
+        except Exception as e:
+            logger.error(f"Failed to create profile for {client_name}: {str(e)}")
+            raise
     
-    return profile
+    logger.info(f"Loading profile from {filename}")
+    with open(filename, 'r') as f:
+        profile_data = json.load(f)
+    return ClientProfile(**profile_data)
 
 def save_report(report: str, client_name: str):
     """Save the generated report as a markdown file."""
@@ -58,7 +59,7 @@ def main(client_name: str, additional_context: str = ""):
     logger.info(f"Starting agent workflow for client: {client_name}")
 
     # Load or create client profile
-    client_profile = load_client_profile(client_name)
+    client_profile = load_client_profile(client_name, additional_context)
     logger.info(f"Loaded profile for {client_name}")
 
     # Perform content research
