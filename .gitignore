@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+
+# macOS
+.DS_Store
+
+# Environment variables
+.env
+
+# IDE settings
+.vscode/
+.idea/
+
+# Project-specific directories
+/data/*
+/profiles/*
+/reports/*
+
+# Ignore .cursorrules files
+.cursorrules
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+
+# Keep .gitkeep files in empty directories
+!data/.gitkeep
+!profiles/.gitkeep
+!reports/.gitkeep
