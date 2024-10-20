@@ -38,6 +38,7 @@ def load_client_profile(client_name: str, context: str = "") -> ClientProfile:
             return profile
         except Exception as e:
             logger.error(f"Failed to create profile for {client_name}: {str(e)}")
+            logger.info("Please try running the script again. If the issue persists, check the input data and ClientProfile model.")
             raise
     
     logger.info(f"Loading profile from {filename}")
@@ -56,24 +57,28 @@ def save_report(report: str, client_name: str):
 
 def main(client_name: str, additional_context: str = ""):
     """Execute the main agent workflow."""
-    logger.info(f"Starting agent workflow for client: {client_name}")
+    try:
+        logger.info(f"Starting agent workflow for client: {client_name}")
 
-    # Load or create client profile
-    client_profile = load_client_profile(client_name, additional_context)
-    logger.info(f"Loaded profile for {client_name}")
+        # Load or create client profile
+        client_profile = load_client_profile(client_name, additional_context)
+        logger.info(f"Loaded profile for {client_name}")
 
-    # Perform content research
-    research_results = research_content(client_profile.dict(), additional_context)
-    logger.info("Content research completed")
+        # Perform content research
+        research_results = research_content(client_profile.dict(), additional_context)
+        logger.info("Content research completed")
 
-    # Generate report
-    report = generate_report(research_results, client_profile, additional_context)
-    logger.info("Report generated")
+        # Generate report
+        report = generate_report(research_results, client_profile, additional_context)
+        logger.info("Report generated")
 
-    # Save report
-    save_report(report, client_name)
+        # Save report
+        save_report(report, client_name)
 
-    logger.info("Agent workflow completed successfully")
+        logger.info("Agent workflow completed successfully")
+    except Exception as e:
+        logger.error(f"An error occurred during the agent workflow: {str(e)}")
+        logger.info("Please try running the script again. If the issue persists, check the input data and ensure all dependencies are correctly installed.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Execute the agent workflow for a client.")
