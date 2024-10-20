@@ -77,6 +77,90 @@ You can also run the individual agents by calling them directly, with or without
 python -m agents.client_profiler "Client Name" --context "Additional context"
 ```
 
+## Example Outputs
+
+See example outputs in their respective directories:
+
+- [profiles](/profiles/example.json)
+- [content](/content/example.json)
+- [reports](/reports/example.md)
+
+### Example Profile
+
+```json
+{
+  "name": "Sam Altman",
+  "bio": "Samuel Harris Altman (born April 22, 1985) is an American entrepreneur and investor best known as the CEO of OpenAI since 2019. He briefly experienced being fired and reinstated in November 2023. He is also the chairman of clean energy companies Oklo Inc. and Helion Energy. Altman is regarded as a leading figure in the AI technology boom, driving advancements and discussions around Artificial General Intelligence (AGI). He is recognized for his vision of aligning AI development with societal benefits.",
+  "expertise": [
+    "Artificial Intelligence",
+    "Entrepreneurship",
+    "Investment",
+    "Clean Energy",
+    "Technology Trends"
+  ],
+  "current_goals": [
+    "Build AGI rapidly",
+    "Ensure AI benefits all of humanity",
+    "Expand Worldcoin's reach",
+    "Promote clean energy initiatives",
+    "Engage in policy discussions regarding AI and energy"
+  ],
+  "company_news": [
+    {
+      "title": "Sam Altman's Worldcoin becomes World and shows new iris-scanning Orb to prove your humanity",
+      "url": "https://techcrunch.com/2024/10/17/sam-altmans-worldcoin-becomes-world-and-shows-new-iris-scanning-orb-to-prove-your-humanity/"
+    },
+    {
+      "title": "This is OpenAI CEO Sam Altman's favorite question about AGI",
+      "url": "https://www.msn.com/en-us/news/technology/this-is-openai-ceo-sam-altman-s-favorite-question-about-agi/ar-AA1synEV"
+    },
+    {
+      "title": "Sam Altman risks spreading himself too thin at OpenAI",
+      "url": "https://www.msn.com/en-us/money/companies/sam-altman-risks-spreading-himself-too-thin-at-openai/ar-AA1st8zu"
+    },
+    {
+      "title": "WLD Price Forecast: Sam Altman's Worldcoin Targets 1B Users with Ethereum L2 Launch",
+      "url": "https://www.fxempire.com/forecasts/article/wld-price-forecast-sam-altmans-worldcoin-targets-1b-users-with-ethereum-l2-launch-1469559"
+    },
+    {
+      "title": "Sam Altman's Energy 'New Deal' Is Good for AI. What About Americans?",
+      "url": "https://www.bloomberg.com/news/articles/2024-10-17/sam-altman-s-energy-new-deal-is-good-for-openai-and-ai-what-about-americans"
+    }
+  ],
+  "additional_info": {
+    "notable_projects": [
+      "OpenAI",
+      "Worldcoin",
+      "Oklo Inc.",
+      "Helion Energy"
+    ],
+    "interests": [
+      "Ethical AI",
+      "Public Policy",
+      "Transformative Technologies"
+    ]
+  }
+}
+```
+
+
+## Viewing Reports
+
+To view a generated report rendered in your browser, you can use the `grip` tool. First, make sure you have `grip` installed:
+
+```
+pip install grip
+```
+
+Then, to view a specific report, run:
+
+```
+grip reports/<report_name>.md
+```
+
+Replace `<report_name>` with the actual name of the report file you want to view. This will start a local server, and you can view the rendered report by opening a web browser and navigating to the URL provided by grip (usually http://localhost:6419).
+
+
 ## Project Structure
 
 - `agents/`: Directory containing the agent modules
@@ -98,14 +182,6 @@ You can customize the behavior of the AI agents by modifying the prompts and con
 - pydantic: Data validation and settings management using Python type annotations.
 - python-dotenv: Loads environment variables from a .env file.
 
-## Contributing
-
-Contributions to client-researcher are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## Troubleshooting
 
 If you encounter any issues while running the scripts, check the following:
@@ -123,18 +199,10 @@ If you're still having trouble, please open an issue on the GitHub repository wi
 3. Integration with additional data sources for more comprehensive research.
 4. Prompt engineering for better content relevance scoring.å
 
-## Viewing Reports
+## Contributing
 
-To view a generated report rendered in your browser, you can use the `grip` tool. First, make sure you have `grip` installed:
+Contributions to client-researcher are welcome! Please feel free to submit a Pull Request.
 
-```
-pip install grip
-```
+## License
 
-Then, to view a specific report, run:
-
-```
-grip reports/<report_name>.md
-```
-
-Replace `<report_name>` with the actual name of the report file you want to view. This will start a local server, and you can view the rendered report by opening a web browser and navigating to the URL provided by grip (usually http://localhost:6419).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
