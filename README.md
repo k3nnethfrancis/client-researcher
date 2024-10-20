@@ -109,12 +109,9 @@ If you're still having trouble, please open an issue on the GitHub repository wi
 ## Potential Improvements
 
 1. Add perplexity integration
-2. Add better type safety to allow open source models to be used more reliably
+2. Add better validation to allow open source models to be used more reliably
 3. Integration with additional data sources for more comprehensive research.
-4. Prompt engineering for better content relevance scoring.
-5. A web interface for easier interaction with the tool.
-6. Improved error handling and recovery mechanisms.
-7. Support for batch processing of multiple clients.
+4. Prompt engineering for better content relevance scoring.å
 
 ## Viewing Reports
 
