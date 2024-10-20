@@ -5,7 +5,7 @@ This script executes the main agent workflow, including content research and rep
 It can be run ad-hoc or scheduled to run periodically.
 
 Usage:
-    python agent.py --client <client_name> [--context <additional_context>]
+    python agent_executor.py --client <client_name> [--context <additional_context>]
 
 Options:
     --client    Name of the client (required)
@@ -17,58 +17,32 @@ import logging
 import json
 import os
 from datetime import datetime
-from typing import Dict, List
+from typing import Dict, Any
 
-from phi.agent import Agent
-from phi.model.openai import OpenAIChat
+from agents.client_profiler import ClientProfile, main as run_client_profiler
 from agents.content_researcher import research_content, ContentResearcherResults
-from agents.client_profiler import ClientProfile
+from agents.report_generator import generate_report
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 def load_client_profile(client_name: str) -> ClientProfile:
-    """Load a client profile from the profiles directory."""
+    """Load a client profile from the profiles directory or create a new one if it doesn't exist."""
     filename = f"profiles/{client_name.replace(' ', '_').lower()}.json"
     if not os.path.exists(filename):
-        raise FileNotFoundError(f"No profile found for {client_name}. Please run the client profiler first.")
+        logger.info(f"No profile found for {client_name}. Running client profiler.")
+        profile = run_client_profiler(client_name)
+        
+        # Check again if the file was created
+        if not os.path.exists(filename):
+            raise FileNotFoundError(f"Failed to create profile for {client_name}")
+    else:
+        with open(filename, 'r') as f:
+            profile_data = json.load(f)
+        profile = ClientProfile(**profile_data)
     
-    with open(filename, 'r') as f:
-        profile_data = json.load(f)
-    return ClientProfile(**profile_data)
-
-def generate_report(research_results: ContentResearcherResults, client_profile: ClientProfile, additional_context: str = "") -> str:
-    """Generate a markdown report based on the research results and client profile."""
-    report_generator = Agent(
-        name="Report Generator",
-        role="Generate insightful reports based on research results",
-        model=OpenAIChat(id="gpt-4"),
-    )
-
-    prompt = f"""
-    Generate a markdown report for our client based on the following information:
-
-    Client Profile:
-    {json.dumps(client_profile.dict(), indent=2)}
-
-    Research Results:
-    {json.dumps(research_results.dict(), indent=2)}
-
-    Additional Context:
-    {additional_context}
-
-    The report should include:
-    1. A brief summary of the most relevant and interesting findings
-    2. How these findings relate to the client's expertise and goals
-    3. Any actionable insights or recommendations
-    4. A section highlighting the most relevant news or developments in the client's industry
-
-    Format the report in markdown, with appropriate headers, bullet points, and emphasis where needed.
-    """
-
-    response = report_generator.run(prompt)
-    return response.content
+    return profile
 
 def save_report(report: str, client_name: str):
     """Save the generated report as a markdown file."""
@@ -83,14 +57,17 @@ def main(client_name: str, additional_context: str = ""):
     """Execute the main agent workflow."""
     logger.info(f"Starting agent workflow for client: {client_name}")
 
-    # Load client profile
+    # Load or create client profile
     client_profile = load_client_profile(client_name)
+    logger.info(f"Loaded profile for {client_name}")
 
     # Perform content research
     research_results = research_content(client_profile.dict(), additional_context)
+    logger.info("Content research completed")
 
     # Generate report
     report = generate_report(research_results, client_profile, additional_context)
+    logger.info("Report generated")
 
     # Save report
     save_report(report, client_name)

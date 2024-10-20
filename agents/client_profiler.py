@@ -21,6 +21,7 @@ from phi.model.ollama import Ollama
 from phi.tools.duckduckgo import DuckDuckGo
 from pydantic import BaseModel, Field
 from typing import List, Optional
+import argparse
 
 from dotenv import load_dotenv; load_dotenv()
 
@@ -43,12 +44,9 @@ class ClientProfile(BaseModel):
 client_profile_builder = Agent(
     name="Client Profile Builder",
     role="Build detailed profiles of clients",
-    model=OpenAIChat(id="gpt-4o"),
-    # model=Ollama(id="llama3.1:70b"),
+    model=OpenAIChat(id="gpt-4o-mini"),  # or "gpt-3.5-turbo"
     tools=[DuckDuckGo()],
     response_model=ClientProfile,
-    # structured_outputs=True,
-    # stream=True,
 )
 
 def save_client_profile(profile: ClientProfile):
@@ -82,39 +80,63 @@ def extract_json_from_text(text: str) -> dict:
             logger.error("Failed to parse JSON from the extracted text")
     return {}
 
-def main(client_name: str):
+def load_client_profile(client_name: str) -> ClientProfile:
+    """Load a client profile from the profiles directory."""
+    filename = f"profiles/{client_name.replace(' ', '_').lower()}.json"
+    if not os.path.exists(filename):
+        raise FileNotFoundError(f"No profile found for {client_name}.")
+    
+    with open(filename, 'r') as f:
+        profile_data = json.load(f)
+    return ClientProfile(**profile_data)
+
+def main(client_name: str, create_new: bool = True):
     """
-    Generate and save a client profile.
+    Generate and save a client profile or load an existing one.
 
     Args:
         client_name (str): The name and additional information about the client.
+        create_new (bool): Whether to create a new profile or load an existing one.
     """
-    logger.info(f"Generating profile for: {client_name}")
-    try:
-        run_response = client_profile_builder.run(client_name)
-        logger.debug(f"Run response: {run_response}")
-        
-        if hasattr(run_response, 'content'):
-            if isinstance(run_response.content, ClientProfile):
-                profile = run_response.content
-            elif isinstance(run_response.content, dict):
-                profile = ClientProfile(**run_response.content)
-            elif isinstance(run_response.content, str):
-                json_data = extract_json_from_text(run_response.content)
-                if json_data:
-                    profile = ClientProfile(**json_data)
-                else:
-                    raise ValueError("Could not extract valid JSON from the response")
-            else:
-                raise TypeError(f"Unexpected content type: {type(run_response.content)}")
+    if create_new:
+        logger.info(f"Generating profile for: {client_name}")
+        try:
+            run_response = client_profile_builder.run(client_name)
+            logger.debug(f"Run response: {run_response}")
             
-            save_client_profile(profile)
-        else:
-            logger.error("Run response does not have a 'content' attribute")
-    except Exception as e:
-        logger.error(f"An error occurred while generating the profile: {str(e)}")
-        logger.debug("Error details:", exc_info=True)
+            if hasattr(run_response, 'content'):
+                if isinstance(run_response.content, ClientProfile):
+                    profile = run_response.content
+                elif isinstance(run_response.content, dict):
+                    profile = ClientProfile(**run_response.content)
+                elif isinstance(run_response.content, str):
+                    json_data = extract_json_from_text(run_response.content)
+                    if json_data:
+                        profile = ClientProfile(**json_data)
+                    else:
+                        raise ValueError("Could not extract valid JSON from the response")
+                else:
+                    raise TypeError(f"Unexpected content type: {type(run_response.content)}")
+                
+                save_client_profile(profile)
+            else:
+                logger.error("Run response does not have a 'content' attribute")
+        except Exception as e:
+            logger.error(f"An error occurred while generating the profile: {str(e)}")
+            logger.debug("Error details:", exc_info=True)
+    else:
+        try:
+            profile = load_client_profile(client_name)
+            logger.info(f"Loaded existing profile for: {client_name}")
+        except FileNotFoundError as e:
+            logger.error(str(e))
+        except Exception as e:
+            logger.error(f"An error occurred while loading the profile: {str(e)}")
+            logger.debug("Error details:", exc_info=True)
 
 if __name__ == "__main__":
-    client_name = input("Enter the client's name, relevant info, and social profiles for scraping: ")
-    main(client_name)
+    parser = argparse.ArgumentParser(description="Generate or load a client profile.")
+    parser.add_argument("client_name", help="Name and additional information about the client")
+    parser.add_argument("--load", action="store_true", help="Load an existing profile instead of creating a new one")
+    args = parser.parse_args()
+    main(args.client_name, create_new=not args.load)
