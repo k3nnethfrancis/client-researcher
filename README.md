@@ -41,39 +41,46 @@ This project consists of several components:
 
 Run the client profiler to create a new client profile:
 
-
 ```
-python -m client_profiler
+python -m agents.client_profiler "Client Name"
 ```
 
-Follow the prompts to enter the client's information. The profile will be saved in the `profiles` directory.
+This will generate a profile for the specified client and save it in the `profiles` directory.
 
 ### 2. Run the Content Researcher
 
 To research content for a specific client:
 
 ```
-python agent_executor.py --client "Client Name" --context "Additional context for search"
+python -m agents.content_researcher "Client Name"
 ```
 
-This will generate a research report based on the client's profile and the provided context.
+This will perform content research based on the client's profile and save the results in the `content` directory.
 
-### 3. View the Generated Report
+### 3. Generate a Report
 
-After running the agent_executor.py script, you can find the generated report in the `reports` directory. The filename will include the client's name and a timestamp.
+To generate a report for a client:
+
+```
+python agent_executor.py --client "Client Name" [--context "Additional context"]
+```
+
+This will run the entire workflow, including profile loading (or generation if it doesn't exist), content research, and report generation. The generated report will be saved in the `reports` directory.
 
 ## Project Structure
 
-- `client_profiler.py`: Handles the creation and storage of client profiles.
-- `content_researcher.py`: Performs content research based on client profiles and additional context.
-- `agent_executor.py`: The main script that orchestrates the workflow, including content research and report generation.
+- `agents/`: Directory containing the agent modules
+  - `client_profiler.py`: Handles the creation and storage of client profiles.
+  - `content_researcher.py`: Performs content research based on client profiles and additional context.
+  - `report_generator.py`: Generates the final report based on research results.
+- `agent_executor.py`: The main script that orchestrates the entire workflow.
 - `profiles/`: Directory containing saved client profiles.
-- `data/`: Directory containing raw research results.
+- `content/`: Directory containing raw research results.
 - `reports/`: Directory containing generated markdown reports.
 
 ## Customization
 
-You can customize the behavior of the AI agents by modifying the prompts in `content_researcher.py` and `agent_executor.py`. Adjust the search queries, result formatting, or report structure to better suit your needs.
+You can customize the behavior of the AI agents by modifying the prompts and configurations in the respective agent files within the `agents/` directory.
 
 ## Dependencies
 
@@ -104,5 +111,5 @@ If you're still having trouble, please open an issue on the GitHub repository wi
 1. Integration with additional data sources for more comprehensive research.
 2. Prompt engineering for better content relevance scoring.
 3. A web interface for easier interaction with the tool.
-
-We hope you find client-researcher useful for your content research needs. If you have any questions or feedback, please don't hesitate to reach out or open an issue on GitHub.
+4. Improved error handling and recovery mechanisms.
+5. Support for batch processing of multiple clients.
